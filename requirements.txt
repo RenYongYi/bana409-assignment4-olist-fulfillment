@@ -1,0 +1,4 @@
+# Streamlit Cloud runtime; notebook/reproduction dependencies are pinned in uv.lock.
+streamlit==1.66.0
+pandas==2.3.3
+altair==6.3.0
