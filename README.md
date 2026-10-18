@@ -1,223 +1,239 @@
 # Fulfillment Desk
 
-A small Streamlit dashboard for one **e-commerce fulfillment operations manager** who
-must prioritize overdue orders and assign seller or carrier follow-up.
+A Streamlit dashboard for an **e-commerce fulfillment operations manager** who needs
+to identify recorded overdue orders, verify their status and assign seller or carrier
+follow-up.
 
-**App URL:** https://bana409-olist-fulfillment-renyongyi.streamlit.app/
-**Repository URL:** https://github.com/RenYongYi/bana409-assignment4-olist-fulfillment
-
-This README answers Steps 1–4 of the BANA409 Data App exercise. The separate
-`phone-trade-in.ipynb` contains Part 2 and the two submission links in its first Markdown
-cell. Review and personalize this working draft before submission: the assignment
-requires each student's own explanations and accounts.
+- **Deployed app:** [Fulfillment Desk](https://bana409-olist-fulfillment-renyongyi.streamlit.app/)
+- **Public repository:** [RenYongYi/bana409-assignment4-olist-fulfillment](https://github.com/RenYongYi/bana409-assignment4-olist-fulfillment)
 
 ## Step 1 — Dataset and decision-maker
 
-**Source:** [Brazilian E-Commerce Public Dataset by Olist on Kaggle](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce).
-It is anonymized real commercial data about orders made through Olist in multiple
-Brazilian marketplaces. The source includes 99,441 orders, 112,650 order-item records
-and 99,441 customer records in the three files used here. Purchase timestamps run from
-September 4, 2016 to October 17, 2018. The late tail is sparse, so the app's review-date
-window is February 1, 2017 through August 31, 2018; it is not evidence of current
-operations.
+**Dataset:** [Brazilian E-Commerce Public Dataset by Olist on Kaggle](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce).
+The source contains anonymized, real commercial orders made through Olist across
+Brazilian marketplaces. It is historical transaction data, not a synthetic teaching
+example. The three source tables used contain 99,441 orders, 112,650 order-item records
+and 99,441 customer records.
 
-**Unit of observation:** one row per order. `scripts/prepare_olist.py` first sums item
-prices and counts items/sellers within each order, then joins orders and customer
-destination state with explicit one-to-one/many-to-one validation. This prevents a
-multi-item order from multiplying headline order counts or merchandise value. No
-sampling is performed. The resulting single CSV has 99,441 rows, 11 columns and
-16,045,919 bytes (about 16.05 MB), below the exercise's approximately 25 MB limit.
-The raw files and large, unused geolocation table are not committed.
+**Period:** purchase dates run from September 4, 2016 to October 17, 2018. The app's
+review window is February 1, 2017 to August 31, 2018 because the final two months are
+sparsely represented. The full source period remains visible on the page.
 
-**One decision-maker:** the fulfillment operations manager. This is not a sales,
-marketing or general executive dashboard. The manager coordinates the seller-operations
-and logistics leads and needs to decide which overdue orders need follow-up today.
-The destination filter supports a regional investigation within that role.
+**One row:** one order in `data/olist_orders.csv`. Before joining, item prices are
+summed and item/seller counts are calculated within each order. Orders and customer
+destination state are then joined with explicit cardinality checks. This avoids
+multiplying order counts and merchandise value when an order contains several items.
+The app reads this one CSV: **99,441 rows, 11 columns, 16,045,919 bytes (16.05 MB)**,
+below the exercise's approximately 25 MB limit. No sampling is used. The raw source
+tables are excluded; the download and preparation code is in `scripts/`.
+
+**One decision-maker:** the e-commerce fulfillment operations manager, who coordinates
+seller operations and logistics. The destination filter supports regional investigation
+by this same manager; it does not turn the page into a general sales or executive
+report. Data attribution, processing changes and the CC BY-NC-SA 4.0 license are in
+[DATA_LICENSE.md](DATA_LICENSE.md).
 
 ## Step 2 — Why this dashboard should exist
 
+**Who checks it and when?** In the proposed production workflow, the fulfillment
+manager reviews it at **09:00 and 15:00 on working days**, with additional checks after
+an exception notification. The current application demonstrates that workflow through
+historical snapshots.
+
 **Decision sentence:** If the fulfillment manager sees the overdue queue rising, they
-will inspect the oldest overdue orders and assign follow-up to seller operations when
-handoff has not occurred, or to the logistics lead when the order is already with a
-carrier. Merchandise value helps break ties between orders of similar overdue age.
+will inspect the oldest recorded exceptions, verify whether those orders are still
+unresolved, and assign seller-operations follow-up when handoff is pending or
+logistics follow-up when the order is already with a carrier. Among orders with the
+same overdue age, merchandise value helps set the investigation order.
 
-In the proposed current workflow, the manager exports order and logistics files, joins
-them manually and asks colleagues for updates. This is a business-workflow assumption,
-not a claim verified by Olist. Repeating those steps consumes time, encourages duplicate
-counting and can leave late orders unassigned. This project does not invent measured
-labor savings or a monetary return on investment.
+**Without the dashboard:** the assumed workflow is to export order and logistics
+files, join them manually and ask colleagues for status updates. Repeating that work
+consumes staff time and can cause duplicate counting, missed cases and follow-up sent
+to the wrong team. This is a proposed business workflow, not an observation verified
+at Olist. The dataset does not measure staff hours, compensation or the return on this
+app, so no dollar savings are claimed.
 
-The decision recurs every working day and exceptions can change within the day as
-orders are approved, handed over or delivered. An interactive dashboard lets the same
-person check direction, isolate a destination and download a work queue. A weekly email
-would be stale for same-day follow-up; a one-off report would answer a past question
-without maintaining a queue. Alerts complement the dashboard when a threshold is
-crossed, but the manager still needs a view to investigate and allocate work.
+**Why a dashboard?** This is a recurring queue-management decision, rather than a
+one-time question. A weekly email or static report becomes stale as approvals,
+handoffs and deliveries occur. An alert can flag an increase, but it cannot replace
+checking the trend, narrowing the destination and exporting the affected orders for
+assignment. The commercial value is faster, better-directed exception handling;
+measured service or financial improvements would need production evaluation.
 
-## Step 3 — EDA, selected content and page order
+## Step 3 — EDA, content choices and page order
 
-`olist-eda.ipynb` is executed and shows shape, dtypes, missingness, distributions,
-monthly source coverage, event-sequence anomalies, destination differences and the
-seller/carrier stage relationship. At the default replay of **August 1, 2018, 00:00**,
-the eligible cohort contains 96,802 orders. There are **1,649 overdue open orders**,
-**R$262,443.30** in overdue merchandise value and **585 awaiting seller handoff**;
-the remaining 1,064 are with carriers. These are historical descriptive results, not
-predictions or live operating claims.
+[olist-eda.ipynb](olist-eda.ipynb) uses Pandas and Matplotlib to inspect shape, data
+types, missing values, distributions, source coverage and relationships between
+order stage, overdue age, merchandise value and destination.
 
-### Top: three headline numbers, visible immediately
+### Findings that shaped the design
 
-1. **Overdue open orders:** the size of the exception queue.
-2. **Merchandise value overdue:** the item-price value associated with those orders,
-   excluding freight. This is neither the platform's revenue nor an estimate of lost
-   sales, compensation or profit.
-3. **Awaiting seller handoff:** the overdue orders that still require seller-side
-   investigation rather than only carrier follow-up.
+| EDA finding | Dashboard consequence |
+|---|---|
+| 9,803 source orders contain multiple items. | Aggregate to one row per order before calculating headline counts or value. |
+| August 2018 contains 6,512 purchases; September has only 16 and October only 4. | End the selectable review window in August; do not present the sparse tail as a business collapse. |
+| At the default snapshot, 585 overdue orders await handoff and 1,064 are with carriers. | Show a stage breakdown so the manager can route follow-up to the relevant operational lead. |
+| São Paulo accounts for 600 of the 1,649 default overdue records. | Provide a destination-state filter for regional investigation, rather than a large map. |
+| 1,592 of the 1,649 default overdue records have no delivery timestamp anywhere in the source; median overdue age is 226 days and the maximum is 650. | Treat the queue as recorded exceptions that require status verification, not verified current service failures. Retain the records and explain the limitation. |
 
-Each uses `st.metric` within `st.columns` and compares with the previous day's same
-scope. No additional headline KPIs compete for attention.
+### Three headline metrics
 
-The visual layout uses a deep green review sidebar, a warm neutral canvas and white
-metric and chart cards. Teal represents carrier follow-up and amber represents seller
-handoff. Local CSS in `styles.css` defines consistent typography, spacing and responsive
-layouts without external font or image requests. The historical-replay badge, selected
-snapshot and proposed production cadence remain visible.
+The default is **August 1, 2018, 00:00, all destinations**. The eligible replay cohort
+contains 96,802 orders; the following metrics describe the overdue subset at that date.
 
-### Middle: two supporting charts
+| Metric | Default result | Why it belongs at the top |
+|---|---:|---|
+| Overdue open orders | 1,649 | Shows the size of the recorded exception queue. |
+| Merchandise value overdue | R$262,443.30 | Adds monetary context when prioritizing cases of similar overdue age. This is BRL item value, excluding freight, not platform revenue, profit or estimated loss. |
+| Awaiting seller handoff | 585 | Identifies cases that need seller-side investigation rather than only carrier follow-up. |
 
-- A **14-day overdue-count trend** shows whether the queue is building or clearing.
-- An **overdue-stage breakdown** separates awaiting handoff from with-carrier orders,
-  identifying the appropriate follow-up team. It explains the composition of the queue;
-  it does not establish a causal reason for delay.
+These are the only three headline metrics. They use `st.metric` side by side in
+`st.columns`, with changes against the previous day's snapshot using the same region.
+The app rounds the monetary headline to **R$262,443** for readability.
 
-### Bottom: optional operational detail
+### Two supporting charts and two filters
 
-A collapsed order queue is sorted by days overdue, then merchandise value. It contains
-order IDs, destination, follow-up stage, promised date, overdue age, value and seller
-count, and supports CSV export. This makes the dashboard actionable without adding a
-third chart or crowding the first screen. Multi-seller orders require item-level
-verification because the source's handoff timestamp is recorded at order level.
+- **14-day overdue-count trend:** shows whether the exception queue is growing or
+  clearing. For the default scope it rises from 1,584 on July 19 to 1,649 on August 1.
+  The count axis starts at zero, avoiding an exaggerated impression of that change.
+- **Overdue-stage breakdown:** separates awaiting seller handoff from with-carrier
+  orders, making the likely follow-up responsibility visible. It describes the
+  composition of the queue; it does not prove a causal reason for delay.
 
-The page was planned in this order before implementation:
+The only filters are **review date** and **delivery destination**. Date is necessary
+for the historical demonstration; destination lets the manager investigate a region.
+A production version should default to the latest verified snapshot.
+
+### Two things deliberately omitted
+
+1. **Monthly purchase-volume chart.** It is useful in EDA for checking source coverage,
+   but it does not identify which overdue order needs follow-up. Showing it alongside
+   the queue could also encourage misreading the sparse final months as a sales drop.
+2. **Overdue-age and item-value histograms.** These reveal skew and old records in EDA,
+   but neither identifies an actionable case or its follow-up owner. The sorted order
+   table supplies the exact ages and values when the manager needs that detail.
+
+Payment-method mix, product rankings and a geographic map are also outside this
+manager's immediate decision. The first screen is reserved for the exception queue.
+
+### Page sketch and ordering rationale
 
 ```text
-Title / audience and decision / period and refresh caption
-Review scope: historical date and delivery destination
-Overdue orders | Merchandise value overdue | Awaiting seller handoff
-Exception rule and suggested follow-up
-14-day trend | Overdue-stage breakdown
-Collapsed follow-up queue and CSV export
-Historical-view limitations and source attribution
+SIDEBAR                         MAIN PAGE
+Review date                     Title, decision-maker and decision
+Delivery destination            Historical-replay badge, source period and cadence
+Proposed production rhythm      01 / Three headline metrics + snapshot date/scope
+Historical-source note          Suggested follow-up / escalation brief
+                                02 / 14-day trend | Stage breakdown
+                                03 / Collapsed order queue with CSV download
+                                Collapsed historical-view definitions and limits
 ```
 
-**Only two filters:** review date and destination state. The date is needed to inspect
-the historical demonstration; destination supports a focused operational review. A
-production version would default to the latest verified event snapshot.
+The metrics come first because the manager needs to assess scale immediately. The
+brief then connects that assessment to an action. Charts provide direction and
+follow-up context. Detail remains at the bottom for case assignment: order ID,
+destination, stage, promised date, overdue age, item value and seller count. The queue
+is sorted by overdue days, then merchandise value, both descending.
 
-**Two things deliberately not shown:**
+A deep green sidebar, warm neutral background and white cards separate controls from
+results. Teal and amber distinguish carrier and seller stages, with text labels as
+well as color. Local `styles.css` supplies consistent spacing and responsive layouts
+without external fonts or images.
 
-- **Payment-method mix.** The queue already concerns approved orders. A card-versus-
-  installment chart would not change who follows up these overdue cases.
-- **Best-selling products.** Product popularity can interest sales or inventory teams,
-  but it does not assign responsibility for an overdue order. It would dilute this
-  manager's first-screen priorities.
+### Definitions and safeguards against misleading results
 
-A geographic map is also omitted: a destination filter and order queue answer the
-operational question without a large geolocation file.
-
-### Definitions and potentially misleading data
-
-The snapshot is **00:00 at the start of the selected date**, in the source timestamps'
-unspecified local time. An eligible order is open if approved strictly before that
-time and not delivered strictly before it. It is overdue if its promised date is
-earlier than the selected date. A promise for today is not yet late at 00:00. A handoff
-strictly before the snapshot places the order with the carrier. Future handoff and
-delivery timestamps do not determine an earlier displayed stage.
-
-The source lacks cancellation-event timestamps. Final cancelled/unavailable orders
-are excluded retrospectively rather than pretending to know when cancellation occurred.
-Records lacking required approval, promise or value information, and impossible event
-sequences, are also excluded. The excluded union is **2,639 orders**; individual quality
-categories overlap. Therefore the replay is a **retrospectively selected, limited
-cohort**, not the complete historical live backlog. Conditioning on eventual status
-and complete timestamps creates selection bias and can understate exposure.
-
-Other limits are shown in the app's historical-view note: a missing delivery event can
-be an open order or an unrecorded update; very old cases need verification; event times
-do not prove when information reached the source system; time zones are unspecified;
-the sparse September/October 2018 tail is not used for the operational review window.
-Outliers are retained in monetary totals. EDA plot display caps do not alter app data.
+- **Snapshot boundary:** 00:00 at the start of the selected date, using the source's
+  unspecified local time. Approval must occur strictly before that boundary. A delivery
+  or handoff affects the displayed stage only if it occurred strictly before it.
+- **Overdue:** the promised date is earlier than the selected date and no delivery is
+  recorded before the snapshot. A promise for the selected date is not late at 00:00.
+  Future handoff or delivery events cannot determine an earlier displayed stage.
+- **Missing and inconsistent data:** final cancelled/unavailable orders, missing
+  required approval/promise/value records and impossible milestone sequences are
+  excluded. The union excluded is **2,639 orders**; quality categories overlap.
+- **Selection bias:** cancellation-event times are absent, so the exclusions use final
+  status retrospectively. This is a limited cohort, not a reconstruction of the
+  complete historical live backlog, and it can understate exposure.
+- **Unrecorded closure and old cases:** a missing delivery event can mean an unresolved
+  order or an absent update. The old records found in EDA make status reconciliation
+  essential before operational escalation. Event timestamps also do not establish when
+  the source system first learned of an event.
+- **Outliers and shipment detail:** app totals retain all eligible values; display caps
+  used in EDA histograms do not alter those totals. An order-level handoff event may
+  hide different shipment states in a multi-seller order, requiring item-level checks.
 
 ## Step 4 — Refresh, review and action
 
-**Production refresh: hourly** from the order-management and logistics systems.
-Approvals, handoffs and deliveries arrive throughout the day. An hourly refresh can
-remove a resolved case or route an unresolved one to the correct team before the
-next review. Minute-by-minute polling would add integration cost without helping a
-manager who allocates work in batches. This cadence is a design choice for the proposed
-workflow, not something the frozen CSV already does.
+**Refresh the production data hourly.** Approvals, handoffs and deliveries change
+throughout the day. Hourly ingestion from order-management and logistics systems can
+remove resolved cases and update the responsible team before the next review.
+Minute-by-minute integration would add cost without matching a manager who allocates
+work in batches; daily ingestion could leave a morning resolution on the afternoon
+worklist. Hourly is a proposed operating choice to validate against event latency and
+staffing capacity.
 
-**Manager review: 09:00 and 15:00 on working days**, plus an exception notification.
-The refresh schedule and review schedule differ: the data should be ready when the
-manager needs it, but the manager should not have to watch the page continuously.
+**Review at 09:00 and 15:00 on working days.** Data freshness and human review are
+separate: the data should be ready when needed without requiring the manager to watch
+the page continuously. A production exception notification would prompt an extra check.
 
-**Track over time:** the overdue order count for a consistent destination scope.
-**Proposed action threshold:** a daily increase greater than 20%, provided the previous
-day had at least 20 overdue orders, triggers a call to the seller and logistics leads
-and an allocation of the oldest cases. The minimum base avoids percentage alerts from
-one or two cases. This is an explainable starting rule, not a calibrated optimum;
-production history and staffing capacity should be used to validate it.
+**Track overdue order count for a consistent destination scope.** A rise of **more than
+20% from the previous day, when the previous day had at least 20 overdue orders**, is
+the proposed action trigger. After verifying status, the manager calls the seller and
+logistics leads and assigns the oldest unresolved cases. The minimum base avoids
+percentage alerts caused by one or two orders. This is an explainable starting rule,
+not a statistically calibrated optimum.
 
-**Cost of stale data:** a day-old view can keep already delivered orders on the worklist,
-miss newly overdue orders and send follow-up to the wrong team. A week-old view is too
-late for many customer recovery opportunities. That can waste staff time, prolong
-resolution and increase customer-service demand, but the dataset cannot quantify those
-costs or establish lost revenue. We therefore show merchandise exposure rather than
-inventing a profit or savings metric.
+**Staleness has an operational cost.** A day-old view can miss newly overdue orders,
+keep resolved cases in the queue and send follow-up to the wrong team. A week-old view
+can prolong unresolved cases and miss opportunities for timely customer recovery.
+Those errors waste staff effort and may increase customer-service demand; their
+financial cost cannot be estimated from this dataset.
 
-**Production requirement:** use an event log including cancellation and observation
-times, item-level shipment milestones where needed, and a documented time zone. The
-source-period and intended-refresh caption remains visible in this demonstration; it
-does not display an artificial current timestamp or claim a live connection.
+**Current app versus production plan:** this app reads a frozen Kaggle CSV, replays the
+selected date and displays an on-page review brief. It does not automatically ingest
+hourly data or send external alerts. The source period and intended refresh frequency
+are visible on the page. A production implementation would require cancellation and
+observation timestamps, reliable closure events, item-level shipment milestones where
+needed, a documented time zone and monitored refresh jobs.
 
 ## Step 5 — Run and deploy
 
-The project was initialized with `uv init` and uses Python **3.14** as required.
+The project was initialized with `uv init` and uses **Python 3.14**.
 
 ```bash
 uv sync --frozen
 uv run streamlit run app.py
 ```
 
-For an app-only environment, `pip install -r requirements.txt` installs the Streamlit
-runtime. For the full notebooks use the locked `uv` environment. To reproduce the
-derived data from the official source:
+For an app-only environment, install `requirements.txt`. To rebuild the derived Olist
+CSV from the official source:
 
 ```bash
 uv run python scripts/download_olist.py
 uv run python scripts/prepare_olist.py
 ```
 
-Publish the project files (excluding `.venv/` and `data/raw/`) to a **public repository
-under the submitting student's own GitHub account**. In the student's own Streamlit
-Community Cloud account, deploy that repository's `main` branch with main file
-`app.py`; select **Python 3.14** under Advanced settings. Verify the deployed page,
-then place both actual URLs above and in the first Markdown cell of
-`phone-trade-in.ipynb`. Do not substitute a teammate's app or repository.
+The public repository and Streamlit Community Cloud app are linked above. Deployment
+uses the repository's `main` branch, `app.py` as the entry point and Python **3.14**.
+The submitting account is `RenYongYi` on GitHub; the app is deployed through the
+corresponding personal Streamlit Cloud account.
 
-## Verification and Part 2
+## Part 2 — Phone trade-in pricing
 
-- `python -m unittest test_fulfillment.py -v` checks historical milestones, due-date
-  boundaries, destination scope, exclusions and exposure calculations.
-- `olist-eda.ipynb` is executed with no error outputs.
-- `phone-trade-in.ipynb` is executed with the required split, parameter grids and
-  holdout rules; plain Markdown answers follow the relevant code outputs.
-- Part 2 selects a 75% offer rate for the forest and reports $5,700.76 profit on 568
-  purchases from the assignment's 1,000-phone test batch, before operating costs.
-  This is a simulation result, not a guaranteed future return.
+[phone-trade-in.ipynb](phone-trade-in.ipynb) contains the executed analysis and answers
+immediately after the relevant code outputs. Its first Markdown cell includes both
+Part 1 submission links. It uses the instructor's separate simulated phone dataset;
+findings about those phones are not claims about the real market.
 
-## Attribution
+The fixed split is 4,000 training phones and 1,000 test phones with random seed 409.
+Preprocessing and five-fold tuning use training data only. In the required seven-rate
+simulation, the forest's best tested offer is **75%**, buying **568 phones** and earning
+**$5,700.76 before operating costs**. That is a retrospective simulation result, not a
+guaranteed future return or an independently validated production optimum.
 
-Olist data and the derived CSV: **CC BY-NC-SA 4.0**; see `DATA_LICENSE.md` for attribution,
-changes and the source link. Phone data: instructor-provided simulated BANA409 data.
-Assignment: https://bana409.harrywang.me/docs/assignments/assignment-4-linear-regression-sgd-and-random-forest
-Exercise: https://bana409.harrywang.me/docs/lectures/data-app/in-class-group-exercise
+## Sources
+
+- [Olist dataset on Kaggle](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce)
+- [Data attribution and license](DATA_LICENSE.md)
+- [Assignment 4](https://bana409.harrywang.me/docs/assignments/assignment-4-linear-regression-sgd-and-random-forest)
+- [Data App In-Class Group Exercise](https://bana409.harrywang.me/docs/lectures/data-app/in-class-group-exercise)
