@@ -7,7 +7,6 @@ import streamlit as st
 from fulfillment import load_orders, replay_cohort, overdue_orders, headline, backlog_trend
 
 ROOT = Path(__file__).parent
-TEAM_NAME = "Fulfillment Operations Team"
 st.set_page_config(page_title="Olist | Fulfillment Desk", page_icon="📦", layout="wide")
 
 
@@ -18,7 +17,7 @@ def data():
 
 orders = data()
 cohort = replay_cohort(orders)
-st.title(f"Fulfillment Desk · {TEAM_NAME}")
+st.title("Fulfillment Desk")
 st.caption("For the e-commerce fulfillment operations manager: prioritize overdue orders and assign seller or carrier follow-up.")
 st.caption("Data: Sep 2016–Oct 2018, Olist / Kaggle snapshot · Production refresh: hourly · Manager review: 09:00 and 15:00, plus exception alerts.")
 

@@ -1,4 +1,4 @@
-# Fulfillment Desk — Fulfillment Operations Team
+# Fulfillment Desk
 
 A small Streamlit dashboard for one **e-commerce fulfillment operations manager** who
 must prioritize overdue orders and assign seller or carrier follow-up.
@@ -94,7 +94,7 @@ verification because the source's handoff timestamp is recorded at order level.
 The page was planned in this order before implementation:
 
 ```text
-Title with team name / audience and decision / period and refresh caption
+Title / audience and decision / period and refresh caption
 Review scope: historical date and delivery destination
 Overdue orders | Merchandise value overdue | Awaiting seller handoff
 Exception rule and suggested follow-up
