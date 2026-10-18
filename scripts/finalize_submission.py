@@ -9,7 +9,6 @@ root = Path(__file__).resolve().parents[1]
 parser = ArgumentParser()
 parser.add_argument('--repo-url')
 parser.add_argument('--app-url')
-parser.add_argument('--team-name')
 args = parser.parse_args()
 links_path = root / 'submission-links.json'
 links = json.loads(links_path.read_text()) if links_path.exists() else {}
@@ -21,12 +20,6 @@ if args.app_url:
     if not args.app_url.startswith('https://') or '.streamlit.app' not in args.app_url:
         raise ValueError('Expected the verified deployed Streamlit app URL')
     links['app_url'] = args.app_url
-if args.team_name:
-    old = links.get('team_name', 'Fulfillment Operations Team')
-    for name in ['app.py','README.md']:
-        p = root/name
-        p.write_text(p.read_text().replace(old, args.team_name))
-    links['team_name'] = args.team_name
 links_path.write_text(json.dumps(links,indent=2)+'\n')
 
 nb_path = root/'phone-trade-in.ipynb'
