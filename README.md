@@ -3,7 +3,7 @@
 A small Streamlit dashboard for one **e-commerce fulfillment operations manager** who
 must prioritize overdue orders and assign seller or carrier follow-up.
 
-**App URL:** Pending publication in the submitting student's Streamlit Cloud account.
+**App URL:** https://bana409-olist-fulfillment-renyongyi.streamlit.app/
 **Repository URL:** https://github.com/RenYongYi/bana409-assignment4-olist-fulfillment
 
 This README answers Steps 1–4 of the BANA409 Data App exercise. The separate
