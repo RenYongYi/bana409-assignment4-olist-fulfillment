@@ -76,6 +76,12 @@ predictions or live operating claims.
 Each uses `st.metric` within `st.columns` and compares with the previous day's same
 scope. No additional headline KPIs compete for attention.
 
+The visual layout uses a deep green review sidebar, a warm neutral canvas and white
+metric and chart cards. Teal represents carrier follow-up and amber represents seller
+handoff. Local CSS in `styles.css` defines consistent typography, spacing and responsive
+layouts without external font or image requests. The historical-replay badge, selected
+snapshot and proposed production cadence remain visible.
+
 ### Middle: two supporting charts
 
 - A **14-day overdue-count trend** shows whether the queue is building or clearing.
