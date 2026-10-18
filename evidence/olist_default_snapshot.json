@@ -1,0 +1,30 @@
+{
+  "as_of": "2018-08-01",
+  "headlines": {
+    "overdue_orders": 1649,
+    "merchandise_brl": 262443.3,
+    "awaiting_handoff": 585
+  },
+  "cohort_rows": 96802,
+  "excluded_rows": 2639,
+  "quality": {
+    "final_canceled_or_unavailable": 1234,
+    "missing_approval": 160,
+    "missing_item_value": 775,
+    "handoff_before_approval": 1359,
+    "delivery_before_handoff": 23,
+    "delivery_before_approval": 61,
+    "delivered_but_missing_handoff": 1,
+    "excluded_union": 2639,
+    "replay_cohort": 96802
+  },
+  "stage_counts": {
+    "With carrier": 1064,
+    "Awaiting seller handoff": 585
+  },
+  "previous_day": {
+    "overdue_orders": 1638,
+    "merchandise_brl": 260324.09000000003,
+    "awaiting_handoff": 588
+  }
+}

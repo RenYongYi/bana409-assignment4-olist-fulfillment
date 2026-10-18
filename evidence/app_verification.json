@@ -1,0 +1,21 @@
+{
+  "default_metrics": [
+    "1,649",
+    "R$ 262,443",
+    "585"
+  ],
+  "destination_filter": "SP passed",
+  "early_date_and_small_region": "RR at 2017-02-01 passed",
+  "exceptions": 0,
+  "deployed_url": "https://bana409-olist-fulfillment-renyongyi.streamlit.app/",
+  "github_repository": "https://github.com/RenYongYi/bana409-assignment4-olist-fulfillment",
+  "cloud_python_version": "3.14",
+  "cloud_ui_verified": true,
+  "supporting_charts": 2,
+  "historical_default_snapshot": "2018-08-01 00:00",
+  "verified_default_values": {
+    "overdue_orders": 1649,
+    "merchandise_brl_display": "R$ 262,443",
+    "awaiting_handoff": 585
+  }
+}

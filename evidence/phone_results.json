@@ -1,0 +1,385 @@
+{
+  "data_sha256": "93ada504568529d5b76cb2307aca0d1bbe0d0e34c490c23f68e64d77f7357291",
+  "python": "3.14.7",
+  "sklearn": "1.9.1",
+  "training_rows": 4000,
+  "test_rows": 1000,
+  "missing_pct_by_brand": {
+    "OPPO": 23.097112860892388,
+    "Xiaomi": 22.10031347962382,
+    "vivo": 22.084367245657567,
+    "Honor": 20.41343669250646,
+    "Huawei": 18.181818181818183,
+    "Samsung": 17.77777777777778,
+    "Apple": 1.4834205933682374
+  },
+  "battery_median_by_brand": {
+    "Apple": 78.0,
+    "Honor": 78.0,
+    "Huawei": 77.0,
+    "OPPO": 77.0,
+    "Samsung": 76.0,
+    "Xiaomi": 78.0,
+    "vivo": 77.0
+  },
+  "battery_median_by_age": {
+    "0": 97.0,
+    "1": 91.0,
+    "2": 84.0,
+    "3": 77.0,
+    "4": 70.0,
+    "5": 64.0,
+    "6": 62.0
+  },
+  "global_battery_median": 77.0,
+  "resale_median_by_age": {
+    "0": 312.0,
+    "1": 305.0,
+    "2": 187.0,
+    "3": 80.0,
+    "4": 47.0,
+    "5": 31.0,
+    "6": 25.0
+  },
+  "training_mean_price": 165.04325,
+  "sgd_best_parameters": {
+    "sgd__eta0": 0.01,
+    "sgd__max_iter": 10000,
+    "sgd__tol": 1e-05
+  },
+  "rf_best_parameters": {
+    "forest__max_depth": 10,
+    "forest__n_estimators": 150
+  },
+  "scores": {
+    "Baseline": {
+      "RMSE": 181.8064286956391,
+      "MAE": 137.529802,
+      "R_squared": -8.700013309770327e-06
+    },
+    "Linear regression": {
+      "RMSE": 98.00704713724716,
+      "MAE": 71.34519709189058,
+      "R_squared": 0.7093971189312129
+    },
+    "SGD": {
+      "RMSE": 97.91039419608342,
+      "MAE": 71.61294831949549,
+      "R_squared": 0.7099700118855365
+    },
+    "Random forest": {
+      "RMSE": 55.19482708330662,
+      "MAE": 33.21129824408311,
+      "R_squared": 0.9078315973607356
+    }
+  },
+  "improvements": {
+    "Linear regression": {
+      "RMSE_reduction_USD": 83.79938155839196,
+      "MAE_reduction_USD": 66.1846049081094,
+      "R_squared_increase": 0.7094058189445227
+    },
+    "SGD": {
+      "RMSE_reduction_USD": 83.8960344995557,
+      "MAE_reduction_USD": 65.9168536805045,
+      "R_squared_increase": 0.7099787118988463
+    },
+    "Random forest": {
+      "RMSE_reduction_USD": 126.61160161233249,
+      "MAE_reduction_USD": 104.31850375591688,
+      "R_squared_increase": 0.9078402973740454
+    }
+  },
+  "negative_linear_predictions": 166,
+  "linear_price_by_age": {
+    "0": {
+      "phones": 87,
+      "mean_actual": 366.1954022988506,
+      "mean_prediction": 324.31472038070103,
+      "negative_predictions": 0
+    },
+    "1": {
+      "phones": 137,
+      "mean_actual": 351.45985401459853,
+      "mean_prediction": 318.32477577108443,
+      "negative_predictions": 0
+    },
+    "2": {
+      "phones": 175,
+      "mean_actual": 234.86857142857144,
+      "mean_prediction": 245.42560595407014,
+      "negative_predictions": 2
+    },
+    "3": {
+      "phones": 161,
+      "mean_actual": 108.74534161490683,
+      "mean_prediction": 160.0883206161524,
+      "negative_predictions": 8
+    },
+    "4": {
+      "phones": 156,
+      "mean_actual": 74.73717948717949,
+      "mean_prediction": 103.5873402712174,
+      "negative_predictions": 27
+    },
+    "5": {
+      "phones": 128,
+      "mean_actual": 60.4609375,
+      "mean_prediction": 46.84751886711139,
+      "negative_predictions": 45
+    },
+    "6": {
+      "phones": 156,
+      "mean_actual": 41.6025641025641,
+      "mean_prediction": -17.239098972023562,
+      "negative_predictions": 84
+    }
+  },
+  "contrasts": {
+    "Cracked minus perfect screen": -73.81115124835489,
+    "Apple minus Honor": 67.79417797312206,
+    "Previously repaired minus not repaired": -21.83557559751478
+  },
+  "importance": {
+    "Linear regression": {
+      "days_since_launch": {
+        "RMSE_increase_USD": 101.60113607682686,
+        "repeat_std_USD": 3.1616273542385738
+      },
+      "launch_price": {
+        "RMSE_increase_USD": 35.95726094760884,
+        "repeat_std_USD": 1.6966039536788882
+      },
+      "release_year": {
+        "RMSE_increase_USD": 14.513441674889629,
+        "repeat_std_USD": 1.1042827509783852
+      },
+      "battery_health": {
+        "RMSE_increase_USD": 12.115298443632629,
+        "repeat_std_USD": 0.9442569515824141
+      },
+      "brand": {
+        "RMSE_increase_USD": 6.5009643086241224,
+        "repeat_std_USD": 0.8949889202168848
+      },
+      "screen_condition": {
+        "RMSE_increase_USD": 4.542406036183342,
+        "repeat_std_USD": 0.5191241550792187
+      },
+      "tier": {
+        "RMSE_increase_USD": 1.0566431920422246,
+        "repeat_std_USD": 0.22877333292114974
+      },
+      "storage_gb": {
+        "RMSE_increase_USD": 0.42694145500471875,
+        "repeat_std_USD": 0.12714566490076118
+      },
+      "has_box": {
+        "RMSE_increase_USD": 0.13722979524358864,
+        "repeat_std_USD": 0.12447146290024527
+      },
+      "repaired_before": {
+        "RMSE_increase_USD": 0.13302909603635413,
+        "repeat_std_USD": 0.17881678104240284
+      }
+    },
+    "Random forest": {
+      "days_since_launch": {
+        "RMSE_increase_USD": 143.03659717021205,
+        "repeat_std_USD": 3.7812753243649255
+      },
+      "launch_price": {
+        "RMSE_increase_USD": 103.24143116133853,
+        "repeat_std_USD": 4.881499579812451
+      },
+      "screen_condition": {
+        "RMSE_increase_USD": 11.842960540614305,
+        "repeat_std_USD": 0.9186183309021285
+      },
+      "brand": {
+        "RMSE_increase_USD": 10.138039916366443,
+        "repeat_std_USD": 1.5569490840488027
+      },
+      "battery_health": {
+        "RMSE_increase_USD": 6.9410632303438415,
+        "repeat_std_USD": 0.792474296090838
+      },
+      "tier": {
+        "RMSE_increase_USD": 1.0491285313328675,
+        "repeat_std_USD": 0.4445212493342399
+      },
+      "has_box": {
+        "RMSE_increase_USD": 0.9196710533541193,
+        "repeat_std_USD": 0.4046832906883828
+      },
+      "storage_gb": {
+        "RMSE_increase_USD": 0.22681387014848867,
+        "repeat_std_USD": 0.3051819730513451
+      },
+      "release_year": {
+        "RMSE_increase_USD": -0.015266041189985202,
+        "repeat_std_USD": 0.06742358660149533
+      },
+      "repaired_before": {
+        "RMSE_increase_USD": -0.04205323538016046,
+        "repeat_std_USD": 0.05631191815027752
+      }
+    }
+  },
+  "profit_table": {
+    "0.6": {
+      "Baseline bought": 581,
+      "Baseline profit_USD": -29658.076949999995,
+      "Linear regression bought": 430,
+      "Linear regression profit_USD": -2353.567353135031,
+      "Random forest bought": 266,
+      "Random forest profit_USD": 2898.772024584303
+    },
+    "0.65": {
+      "Baseline bought": 602,
+      "Baseline profit_USD": -33804.42372500001,
+      "Linear regression bought": 471,
+      "Linear regression profit_USD": -4128.194168869159,
+      "Random forest bought": 361,
+      "Random forest profit_USD": 4899.689662267807
+    },
+    "0.7": {
+      "Baseline bought": 624,
+      "Baseline profit_USD": -38031.89159999999,
+      "Linear regression bought": 525,
+      "Linear regression profit_USD": -5564.413149523352,
+      "Random forest bought": 448,
+      "Random forest profit_USD": 5301.710675967954
+    },
+    "0.75": {
+      "Baseline bought": 648,
+      "Baseline profit_USD": -42296.0195,
+      "Linear regression bought": 580,
+      "Linear regression profit_USD": -6876.717786679044,
+      "Random forest bought": 568,
+      "Random forest profit_USD": 5700.760562767763
+    },
+    "0.8": {
+      "Baseline bought": 666,
+      "Baseline profit_USD": -46938.0436,
+      "Linear regression bought": 619,
+      "Linear regression profit_USD": -9730.111206497675,
+      "Random forest bought": 656,
+      "Random forest profit_USD": 5053.83323975139
+    },
+    "0.85": {
+      "Baseline bought": 690,
+      "Baseline profit_USD": -51444.866125000015,
+      "Linear regression bought": 649,
+      "Linear regression profit_USD": -13549.702322170544,
+      "Random forest bought": 737,
+      "Random forest profit_USD": 4023.4274771423484
+    },
+    "0.9": {
+      "Baseline bought": 708,
+      "Baseline profit_USD": -56329.55890000002,
+      "Linear regression bought": 672,
+      "Linear regression profit_USD": -18242.533142765777,
+      "Random forest bought": 799,
+      "Random forest profit_USD": 1151.5038326929932
+    }
+  },
+  "baseline_selection": {
+    "0.6": {
+      "same_offer_USD": 99.02595,
+      "bought": 581,
+      "accepted_mean_resale_USD": 47.97934595524957,
+      "share_accepted_at_loss_pct": 87.09122203098106
+    },
+    "0.65": {
+      "same_offer_USD": 107.2781125,
+      "bought": 602,
+      "accepted_mean_resale_USD": 51.12458471760797,
+      "share_accepted_at_loss_pct": 88.53820598006644
+    },
+    "0.7": {
+      "same_offer_USD": 115.53027499999999,
+      "bought": 624,
+      "accepted_mean_resale_USD": 54.58173076923077,
+      "share_accepted_at_loss_pct": 87.66025641025641
+    },
+    "0.75": {
+      "same_offer_USD": 123.7824375,
+      "bought": 648,
+      "accepted_mean_resale_USD": 58.510802469135804,
+      "share_accepted_at_loss_pct": 87.03703703703704
+    },
+    "0.8": {
+      "same_offer_USD": 132.0346,
+      "bought": 666,
+      "accepted_mean_resale_USD": 61.55705705705706,
+      "share_accepted_at_loss_pct": 87.23723723723724
+    },
+    "0.85": {
+      "same_offer_USD": 140.2867625,
+      "bought": 690,
+      "accepted_mean_resale_USD": 65.72898550724638,
+      "share_accepted_at_loss_pct": 86.08695652173914
+    },
+    "0.9": {
+      "same_offer_USD": 148.538925,
+      "bought": 708,
+      "accepted_mean_resale_USD": 68.9774011299435,
+      "share_accepted_at_loss_pct": 86.4406779661017
+    }
+  },
+  "age_profit": {
+    "0": {
+      "phones": 87,
+      "bought": 38,
+      "total_profit_USD": -793.375952652767,
+      "mean_actual_USD": 366.1954022988506,
+      "mean_prediction_USD": 324.31472038070103
+    },
+    "1": {
+      "phones": 137,
+      "bought": 78,
+      "total_profit_USD": 1269.7724486979332,
+      "mean_actual_USD": 351.45985401459853,
+      "mean_prediction_USD": 318.32477577108443
+    },
+    "2": {
+      "phones": 175,
+      "bought": 121,
+      "total_profit_USD": -597.7990926046367,
+      "mean_actual_USD": 234.86857142857144,
+      "mean_prediction_USD": 245.42560595407014
+    },
+    "3": {
+      "phones": 161,
+      "bought": 138,
+      "total_profit_USD": -3082.3203138942727,
+      "mean_actual_USD": 108.74534161490683,
+      "mean_prediction_USD": 160.0883206161524
+    },
+    "4": {
+      "phones": 156,
+      "bought": 114,
+      "total_profit_USD": -2312.0344703583946,
+      "mean_actual_USD": 74.73717948717949,
+      "mean_prediction_USD": 103.5873402712174
+    },
+    "5": {
+      "phones": 128,
+      "bought": 58,
+      "total_profit_USD": -985.3830063281899,
+      "mean_actual_USD": 60.4609375,
+      "mean_prediction_USD": 46.84751886711139
+    },
+    "6": {
+      "phones": 156,
+      "bought": 33,
+      "total_profit_USD": -375.57739953871663,
+      "mean_actual_USD": 41.6025641025641,
+      "mean_prediction_USD": -17.239098972023562
+    }
+  },
+  "best_rf_rate": 0.75,
+  "best_rf_profit": 5700.760562767763,
+  "best_rf_bought": 568
+}
