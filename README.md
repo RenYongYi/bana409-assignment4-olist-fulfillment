@@ -218,19 +218,6 @@ uses the repository's `main` branch, `app.py` as the entry point and Python **3.
 The submitting account is `RenYongYi` on GitHub; the app is deployed through the
 corresponding personal Streamlit Cloud account.
 
-## Part 2 — Phone trade-in pricing
-
-[phone-trade-in.ipynb](phone-trade-in.ipynb) contains the executed analysis and answers
-immediately after the relevant code outputs. Its first Markdown cell includes both
-Part 1 submission links. It uses the instructor's separate simulated phone dataset;
-findings about those phones are not claims about the real market.
-
-The fixed split is 4,000 training phones and 1,000 test phones with random seed 409.
-Preprocessing and five-fold tuning use training data only. In the required seven-rate
-simulation, the forest's best tested offer is **75%**, buying **568 phones** and earning
-**$5,700.76 before operating costs**. That is a retrospective simulation result, not a
-guaranteed future return or an independently validated production optimum.
-
 ## Sources
 
 - [Olist dataset on Kaggle](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce)
