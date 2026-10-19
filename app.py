@@ -1,6 +1,7 @@
 """BANA409 Part 1: a small dashboard for one fulfillment operations manager."""
 from html import escape
 from pathlib import Path
+from datetime import timedelta
 
 import altair as alt
 import pandas as pd
@@ -53,7 +54,7 @@ with st.sidebar:
         <p>Olist · Sep 2016–Oct 2018<br>A frozen dataset, with a proposed live workflow. Review dates end Aug 2018; later records are sparse.</p></div>''')
 
 backlog = overdue_orders(cohort, as_of, state)
-previous = overdue_orders(cohort, pd.Timestamp(as_of) - pd.Timedelta(days=1), state)
+previous = overdue_orders(cohort, as_of - timedelta(days=1), state)
 now, before = headline(backlog), headline(previous)
 
 with st.container(key="pageheader"):
@@ -72,7 +73,7 @@ cols[1].metric("Merchandise value overdue", f"R$ {now['merchandise_brl']:,.0f}",
                f"R$ {now['merchandise_brl'] - before['merchandise_brl']:+,.0f} vs previous day", delta_color="inverse", border=True)
 cols[2].metric("Awaiting seller handoff", f"{now['awaiting_handoff']:,}",
                f"{now['awaiting_handoff'] - before['awaiting_handoff']:+,} vs previous day", delta_color="inverse", border=True)
-st.caption("Overdue = approved, past the promised date and still undelivered at this snapshot. R$ is BRL item value, excluding freight; it is not a loss estimate.")
+st.caption("Overdue = approved, past the promised date and no delivery recorded before this snapshot. R$ is BRL item value, excluding freight; it is not a loss estimate.")
 
 escalate = before['overdue_orders'] >= 20 and now['overdue_orders'] > 1.20 * before['overdue_orders']
 if escalate:
@@ -136,6 +137,8 @@ with st.expander("Open the follow-up queue"):
 with st.expander("How to read this historical view"):
     st.write("This is a historical demonstration, not a live feed. Only approval, carrier handoff and delivery events before the selected date determine each displayed stage. A carrier handoff applies to an order; multi-seller orders may need item-level verification.")
     st.write(f"The source has {len(orders):,} orders; this replay covers {len(cohort):,}. Final cancelled/unavailable orders, records missing required approval, promise or value data, and inconsistent event sequences are excluded. Cancellation timestamps are absent, so the selected cohort cannot reconstruct the complete live backlog and can understate exposure.")
+    if not backlog.empty:
+        st.write(f"In this selected queue, {int(backlog.delivered_at.isna().sum()):,} orders have no delivery timestamp anywhere in the source snapshot; median overdue age is {backlog.days_overdue.median():,.0f} days. These are recorded exceptions that require closure checks before operational follow-up.")
     st.write("A transaction record does not show when an event first reached the source system. Source time zones are unspecified. The last dates are incomplete, and the app does not estimate profit, compensation or causal losses. In production, use event-time records including cancellations and refresh hourly from the order and logistics systems.")
     st.markdown("[Source: Olist on Kaggle](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce)")
 
