@@ -8,6 +8,7 @@ from zipfile import ZipFile, is_zipfile
 import json
 
 ROOT = Path(__file__).resolve().parents[1]
+(ROOT / "evidence").mkdir(exist_ok=True)
 DEST = ROOT / "data/raw/olist"
 FILES = ["olist_orders_dataset.csv", "olist_order_items_dataset.csv", "olist_customers_dataset.csv"]
 

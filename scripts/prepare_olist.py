@@ -4,6 +4,7 @@ import json
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
+(ROOT / "evidence").mkdir(exist_ok=True)
 
 
 def prepare():
